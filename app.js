@@ -78,8 +78,8 @@ var cameraControls;
 		return n;
 	}
 
-	function connect (spiral1, spiral2) {
-		var nucs = convert("hithereherethrerhi");
+	function connect (nucs, spiral1, spiral2) {
+		
 
 
 		var lines = new THREE.Object3D();
@@ -123,14 +123,14 @@ var cameraControls;
 
 
 		// add the first nucleotide
-		material = new THREE.LineBasicMaterial({color:nuc1.color, linewidth:nuc1.width});
+		material = new THREE.LineDashedMaterial({color:nuc1.color, linewidth:nuc1.width});
 		geometry = new THREE.Geometry();
 		geometry.vertices.push(fromVertice,meetingPoint);
 		this.segments.add(new THREE.Line(geometry, material));
 
 		// add second nucleotide
 		geometry = new THREE.Geometry();
-		material = new THREE.LineBasicMaterial({color:nuc2.color, linewidth:nuc2.width});
+		material = new THREE.LineDashedMaterial({color:nuc2.color, linewidth:nuc2.width});
 		geometry.vertices.push(meetingPoint,toVertice);	
 		this.segments.add(new THREE.Line(geometry, material));
 	};
@@ -140,6 +140,7 @@ var cameraControls;
 	}
 
 	function createDNA () {
+		var nucs = convert("hithereherethrerhi");
 		
 		var material = new THREE.LineBasicMaterial({linewidth:10});
 
@@ -150,8 +151,7 @@ var cameraControls;
 
 		dna.add(spiral1);
 		dna.add(spiral2);
-
-		dna.add(connect(spiral1, spiral2));
+		dna.add(connect(nucs, spiral1, spiral2));
 
 		scene.add(dna);
 		// var material = new THREE.MeshLambertMaterial({side: THREE.DoubleSide});
@@ -227,7 +227,7 @@ var cameraControls;
 		addToDOM();
 		animate();
 	} catch(e) {
-		var errorReport = "Your program encountered an unrecoverable error, can not draw on canvas. Error was:<br/><br/>";
+		var errorReport = "Your program encountered an unrecoverable error<br/><br/>";
 		$('#container').append(errorReport+e);
 	}
 })();
