@@ -50,6 +50,13 @@ function spiral (offset) {
 	return geometry;
 }
 
+var nucleotides = {
+	adenin:{color:0xffff00, width:20},
+	thymine:{color:0x00ffff,width:40},
+	guanine:{color:0x0000ff,width:30},
+	cytosine:{color:0xff0000,width:10}
+};
+
 function connect (spiral1, spiral2) {
 	var lines = new THREE.Object3D();
 	// var material = new THREE.LineBasicMaterial({color:0x407711, linewidth:10});
@@ -61,54 +68,47 @@ function connect (spiral1, spiral2) {
 		// var geometry = new THREE.Geometry();
 		// geometry.vertices.push(spiral1.geometry.vertices[i],spiral2.geometry.vertices[i]);
 		// lines.add(new THREE.Line( geometry, material ));
-		var line = new Line(spiral1.geometry.vertices[i],spiral2.geometry.vertices[i],3);
+		var line = new Line(
+			spiral1.geometry.vertices[i],
+			spiral2.geometry.vertices[i],
+			nucleotides.adenin,
+			nucleotides.thymine
+		);
+
 		lines.add(line.getMesh());
 	};
 
 	return lines;
 }
 
-var Line = function (fromVertice, toVertice, segments) {
+var Line = function (fromVertice, toVertice, nuc1, nuc2) {
 
-	colors = [0x407711,0xff7711,0xffff11,0xcc77aa,0x007711];
 
+	var segments = 2;
 
 	this.segments = new THREE.Object3D();
 
 
-	var prev = fromVertice;
-
-	// var segmentDelta = {
-	// 	x:(toVertice.x - fromVertice.x)/segments,
-	// 	z:(toVertice.z - fromVertice.z)/segments
-	// };
-
 	var segmentDeltaVector = new THREE.Vector3( (toVertice.x - fromVertice.x)/segments, 0, (toVertice.z - fromVertice.z)/segments );
-		// 	x:(toVertice.x - fromVertice.x)/segments,
-		// 	z:(toVertice.z - fromVertice.z)/segments
-		// };
+
+	
+	this.material = new THREE.LineBasicMaterial({color:nuc1.color, linewidth:nuc1.width});
+	this.geometry = new THREE.Geometry();
+
+	// var n = new THREE.Vector3(prev.x + segmentDelta.x),prev.y,prev.z + segmentDelta.z));
+	var n = (fromVertice.clone()).add(segmentDeltaVector);
 
 
-	var prev = fromVertice;
-	for (var i = 1; i < segments; i++) {
-		this.material = new THREE.LineBasicMaterial({color:colors[i-1], linewidth:10});
-		this.geometry = new THREE.Geometry();
-
-		// var n = new THREE.Vector3(prev.x + segmentDelta.x),prev.y,prev.z + segmentDelta.z));
-		var n = (prev.clone()).add(segmentDeltaVector);
+	this.geometry.vertices.push(fromVertice,n);
+	this.segments.add(new THREE.Line(this.geometry, this.material));
 
 
-		this.geometry.vertices.push(prev,n);
-		this.segments.add(new THREE.Line(this.geometry, this.material));
-
-		prev = n;
-	};
 
 
 	// add last
 	this.geometry= new THREE.Geometry();
-	this.material = new THREE.LineBasicMaterial({color:0xcc77aa, linewidth:10});
-	this.geometry.vertices.push(prev,toVertice);	
+	this.material = new THREE.LineBasicMaterial({color:nuc2.color, linewidth:nuc2.width});
+	this.geometry.vertices.push(n,toVertice);	
 	this.segments.add(new THREE.Line(this.geometry, this.material));
 
 
