@@ -59,14 +59,29 @@ var cameraControls;
 	};
 
 	function convert(input) {
-	    var output = "";
+		//convert to binary
+	    var binary = "";
 	    for (i=0; i < input.length; i++) {
-	        output += input[i].charCodeAt(0).toString(2) + " ";
-	    }
-		return output;
+	        binary += input[i].charCodeAt(0).toString(2) + "";
+	    };
+	    console.log(binary)
+
+	    // convert to nucleotides
+	    var n = [];
+	    for (i=0; i < binary.length; i++) {
+	    	// TODO
+	    	console.log(input.charAt(i))
+	    	var nuc = binary.charAt(i) == "1" ? nucleotides.adenin : nucleotides.thymine;
+	        n.push(nuc);
+	    };
+
+		return n;
 	}
 
 	function connect (spiral1, spiral2) {
+		var nucs = convert("hithereherethrerhi");
+
+
 		var lines = new THREE.Object3D();
 		// var material = new THREE.LineBasicMaterial({color:0x407711, linewidth:10});
 
@@ -77,11 +92,12 @@ var cameraControls;
 			// var geometry = new THREE.Geometry();
 			// geometry.vertices.push(spiral1.geometry.vertices[i],spiral2.geometry.vertices[i]);
 			// lines.add(new THREE.Line( geometry, material ));
+
 			var line = new Line(
 				spiral1.geometry.vertices[i],
 				spiral2.geometry.vertices[i],
-				nucleotides.adenin,
-				nucleotides.thymine
+				nucs[2*i],
+				nucs[Math.abs(2*i-1)]
 			);
 
 			lines.add(line.getMesh());
@@ -185,7 +201,7 @@ var cameraControls;
 	}
 
 	function animate() {
-		var targetFps = 30;
+		var targetFps = 10;
 		window.setInterval(render, 1000 / targetFps);
 		// window.requestAnimationFrame(animate);
 		// render();
