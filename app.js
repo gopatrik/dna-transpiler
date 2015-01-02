@@ -16,7 +16,7 @@ var cameraControls;
 
 		// LIGHTS
 
-		scene.add( new THREE.AmbientLight( 0x222222 ) );
+		scene.add( new THREE.AmbientLight( 0x333333 ) );
 
 		var light = new THREE.DirectionalLight( 0xFFFFFF, 0.7 );
 		light.position.set( 200, 500, 500 );
@@ -28,14 +28,14 @@ var cameraControls;
 
 		scene.add( light );
 
-		Coordinates.drawGround({size:1000});
+		// Coordinates.drawGround({size:1000});
 
 		createDNA();
 		// test();
 		// createDrinkingBird();
 	}
 
-	function spiral (offset) {
+	function spiralGeometry(offset) {
 		var geometry = new THREE.Geometry();
 		var circleSegments = 20;
 		var laps = 2;
@@ -144,8 +144,8 @@ var cameraControls;
 		
 		var material = new THREE.LineBasicMaterial({linewidth:10});
 
-		var spiral1 = new THREE.Line( spiral(0), material );
-		var spiral2 = new THREE.Line( spiral(Math.PI), material );
+		var spiral1 = new THREE.Line( spiralGeometry(0), material );
+		var spiral2 = new THREE.Line( spiralGeometry(Math.PI), material );
 
 		dna = new THREE.Object3D();
 
@@ -153,16 +153,11 @@ var cameraControls;
 		dna.add(spiral2);
 		dna.add(connect(nucs, spiral1, spiral2));
 
+		dna.position.setY(100);
+		dna.position.setZ(300);
+		dna.rotation.setX(-Math.PI/4);
+
 		scene.add(dna);
-		// var material = new THREE.MeshLambertMaterial({side: THREE.DoubleSide});
-		// material.color.r = 104/255;
-		// material.color.g = 1/255;
-		// material.color.b = 5/255;
-		// geometry = new THREE.Line3(0,1);
-
-
-		// mesh.position.y = 100;
-
 	};
 
 	function init() {
@@ -174,11 +169,11 @@ var cameraControls;
 		var canvasRatio = canvasWidth / canvasHeight;
 
 		// RENDERER
-		renderer = new THREE.WebGLRenderer( { antialias: true } );
+		renderer = new THREE.WebGLRenderer( { antialias: true, alpha:true } );
 		renderer.gammaInput = true;
 		renderer.gammaOutput = true;
 		renderer.setSize(canvasWidth, canvasHeight);
-		renderer.setClearColorHex( 0xAAAAAA, 1.0 );
+		renderer.setClearColorHex( 0x2C3E50, 1.0 );
 
 		// CAMERA
 		camera = new THREE.PerspectiveCamera( 45, canvasRatio, 1, 4000 );
@@ -214,8 +209,8 @@ var cameraControls;
 		var delta = clock.getDelta();
 		cameraControls.update(delta);
 
-		// rot += 0.02;
-		// dna.rotation.setY(rot);
+		rot += 0.02;
+		dna.rotation.setY(rot);
 
 		renderer.render(scene, camera);
 	}
