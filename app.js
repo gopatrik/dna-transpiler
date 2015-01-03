@@ -31,8 +31,6 @@ var cameraControls;
 		// Coordinates.drawGround({size:1000});
 
 		createDNA();
-		// test();
-		// createDrinkingBird();
 	}
 
 	function spiralGeometry(offset) {
@@ -104,7 +102,7 @@ var cameraControls;
 			lines.add(sphereMesh2);
 
 
-			var line = new Line(
+			var line = new BasePair(
 				spiral1.geometry.vertices[i],
 				spiral2.geometry.vertices[i],
 				nucs[2*i],
@@ -118,7 +116,7 @@ var cameraControls;
 	}
 
 	// courtesy of http://stackoverflow.com/questions/15316127/three-js-line-vector-to-cylinder
-	var cylinderMesh = function( pointX, pointY,color ) {
+	var pipe = function( pointX, pointY,color ) {
 		var material = new THREE.MeshLambertMaterial( {color:color} );
 
 	    // edge from X to Y
@@ -135,7 +133,7 @@ var cameraControls;
 	    return edge;
 	}
 
-	var Line = function (fromVertice, toVertice, nuc1, nuc2) {
+	var BasePair = function (fromVertice, toVertice, nuc1, nuc2) {
 
 		var geometry;
 		var material;
@@ -150,11 +148,11 @@ var cameraControls;
 		);
 		var meetingPoint = (fromVertice.clone()).add(segmentDeltaVector);
 
-		this.segments.add(cylinderMesh(fromVertice, meetingPoint, nuc1.color));
-		this.segments.add(cylinderMesh(meetingPoint, toVertice, nuc2.color));
+		this.segments.add(pipe(fromVertice, meetingPoint, nuc1.color));
+		this.segments.add(pipe(meetingPoint, toVertice, nuc2.color));
 	};
 
-	Line.prototype.getMesh = function() {
+	BasePair.prototype.getMesh = function() {
 		return this.segments;
 	}
 
@@ -172,9 +170,10 @@ var cameraControls;
 		// dna.add(spiral2);
 		dna.add(connect(nucs, spiral1, spiral2));
 
-		// dna.position.setY(100);
-		// dna.position.setZ(300);
-		// dna.rotation.setX(-Math.PI/4);
+		// rotate and reposish
+		dna.position.setY(100);
+		dna.position.setZ(300);
+		dna.rotation.setX(-Math.PI/4);
 
 		scene.add(dna);
 	};
