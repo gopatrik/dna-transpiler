@@ -64,13 +64,11 @@ var cameraControls;
 	    for (i=0; i < input.length; i++) {
 	        binary += input[i].charCodeAt(0).toString(2) + "";
 	    };
-	    console.log(binary)
 
 	    // convert to nucleotides
 	    var n = [];
 	    for (i=0; i < binary.length; i++) {
 	    	// TODO
-	    	console.log(input.charAt(i))
 	    	var nuc = binary.charAt(i) == "1" ? nucleotides.adenin : nucleotides.thymine;
 	        n.push(nuc);
 	    };
@@ -119,6 +117,24 @@ var cameraControls;
 		return lines;
 	}
 
+	// courtesy of http://stackoverflow.com/questions/15316127/three-js-line-vector-to-cylinder
+	var cylinderMesh = function( pointX, pointY,color ) {
+		var material = new THREE.MeshLambertMaterial( {color:color} );
+
+	    // edge from X to Y
+	    var direction = new THREE.Vector3().subVectors( pointY, pointX );
+	    var arrow = new THREE.ArrowHelper( direction, pointX );
+
+	    // cylinder: radiusAtTop, radiusAtBottom, 
+	    //     height, radiusSegments, heightSegments
+	    var edgeGeometry = new THREE.CylinderGeometry( 4, 4, direction.length(), 6, 4 );
+	    var edge = new THREE.Mesh( edgeGeometry, material );
+
+	    edge.rotation = arrow.rotation.clone();
+	    edge.position = new THREE.Vector3().addVectors( pointX, direction.multiplyScalar(0.5) );
+	    return edge;
+	}
+
 	var Line = function (fromVertice, toVertice, nuc1, nuc2) {
 
 		var geometry;
@@ -134,18 +150,8 @@ var cameraControls;
 		);
 		var meetingPoint = (fromVertice.clone()).add(segmentDeltaVector);
 
-
-		// add the first nucleotide
-		material = new THREE.LineDashedMaterial({color:nuc1.color, linewidth:nuc1.width});
-		geometry = new THREE.Geometry();
-		geometry.vertices.push(fromVertice,meetingPoint);
-		this.segments.add(new THREE.Line(geometry, material));
-
-		// add second nucleotide
-		geometry = new THREE.Geometry();
-		material = new THREE.LineDashedMaterial({color:nuc2.color, linewidth:nuc2.width});
-		geometry.vertices.push(meetingPoint,toVertice);	
-		this.segments.add(new THREE.Line(geometry, material));
+		this.segments.add(cylinderMesh(fromVertice, meetingPoint, nuc1.color));
+		this.segments.add(cylinderMesh(meetingPoint, toVertice, nuc2.color));
 	};
 
 	Line.prototype.getMesh = function() {
@@ -166,9 +172,9 @@ var cameraControls;
 		// dna.add(spiral2);
 		dna.add(connect(nucs, spiral1, spiral2));
 
-		dna.position.setY(100);
-		dna.position.setZ(300);
-		dna.rotation.setX(-Math.PI/4);
+		// dna.position.setY(100);
+		// dna.position.setZ(300);
+		// dna.rotation.setX(-Math.PI/4);
 
 		scene.add(dna);
 	};
@@ -208,8 +214,9 @@ var cameraControls;
 		container.appendChild( renderer.domElement );
 	}
 
+
 	function animate() {
-		var targetFps = 5;
+		var targetFps = 1;
 		window.setInterval(render, 1000 / targetFps);
 		// window.requestAnimationFrame(animate);
 		// render();
