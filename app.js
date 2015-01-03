@@ -93,6 +93,19 @@ var cameraControls;
 			// geometry.vertices.push(spiral1.geometry.vertices[i],spiral2.geometry.vertices[i]);
 			// lines.add(new THREE.Line( geometry, material ));
 
+
+			var sphereMaterial = new THREE.MeshLambertMaterial( {color:0xffffff});
+			var sphereGeometry = new THREE.SphereGeometry( 15, 32, 32);
+			var sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+			var sphereMesh2 = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+			sphereMesh.position = spiral1.geometry.vertices[i];
+			sphereMesh2.position = spiral2.geometry.vertices[i];
+
+			lines.add(sphereMesh);
+			lines.add(sphereMesh2);
+
+
 			var line = new Line(
 				spiral1.geometry.vertices[i],
 				spiral2.geometry.vertices[i],
@@ -149,8 +162,8 @@ var cameraControls;
 
 		dna = new THREE.Object3D();
 
-		dna.add(spiral1);
-		dna.add(spiral2);
+		// dna.add(spiral1);
+		// dna.add(spiral2);
 		dna.add(connect(nucs, spiral1, spiral2));
 
 		dna.position.setY(100);
