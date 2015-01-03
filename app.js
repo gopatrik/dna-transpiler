@@ -52,10 +52,10 @@ var cameraControls;
 	}
 
 	var nucleotides = {
-		adenin:{color:0xffff00, width:20, length:2/3},
-		thymine:{color:0x00ffff,width:40,length:1/3},
-		guanine:{color:0x0000ff,width:30,length:2/3},
-		cytosine:{color:0xff0000,width:10,length:1/3}
+		adenin:{color:0xEC6451, width:4, length:2/3},
+		thymine:{color:0x3BD086,width:6,length:1/3},
+		guanine:{color:0xF3CB31,width:5,length:2/3},
+		cytosine:{color:0x45AAE0,width:2,length:1/3}
 	};
 
 	function convert(input) {
@@ -142,7 +142,7 @@ var cameraControls;
 	function createDNA () {
 		var nucs = convert("hithereherethrerhi");
 		
-		var material = new THREE.LineBasicMaterial({linewidth:10});
+		var material = new THREE.LineBasicMaterial({linewidth:3, color:0xE6E6E6});
 
 		var spiral1 = new THREE.Line( spiralGeometry(0), material );
 		var spiral2 = new THREE.Line( spiralGeometry(Math.PI), material );
@@ -209,8 +209,8 @@ var cameraControls;
 		var delta = clock.getDelta();
 		cameraControls.update(delta);
 
-		rot += 0.02;
-		dna.rotation.setY(rot);
+		// rot += 0.02;
+		// dna.rotation.setY(rot);
 
 		renderer.render(scene, camera);
 	}
