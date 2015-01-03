@@ -14,8 +14,14 @@ var cameraControls;
 		scene = new THREE.Scene();
 		// scene.fog = new THREE.Fog( 0x808080, 2000, 4000 );
 
-		// LIGHTS
+		lights();
 
+		// Coordinates.drawGround({size:1000});
+
+		createDNA();
+	}
+
+	var lights = function () {
 		scene.add( new THREE.AmbientLight( 0x999999 ) );
 
 		var light = new THREE.DirectionalLight( 0xFFFFFF, 0.7 );
@@ -27,10 +33,6 @@ var cameraControls;
 		light.position.set( -200, -100, -400 );
 
 		scene.add( light );
-
-		// Coordinates.drawGround({size:1000});
-
-		createDNA();
 	}
 
 	function spiralGeometry(offset) {
@@ -75,9 +77,6 @@ var cameraControls;
 	}
 
 	function connect (nucs, spiral1, spiral2) {
-		
-
-
 		var lines = new THREE.Object3D();
 		// var material = new THREE.LineBasicMaterial({color:0x407711, linewidth:10});
 
@@ -125,7 +124,7 @@ var cameraControls;
 
 	    // cylinder: radiusAtTop, radiusAtBottom, 
 	    //     height, radiusSegments, heightSegments
-	    var edgeGeometry = new THREE.CylinderGeometry( 4, 4, direction.length(), 6, 4 );
+	    var edgeGeometry = new THREE.CylinderGeometry( 6, 6, direction.length(), 6, 4 );
 	    var edge = new THREE.Mesh( edgeGeometry, material );
 
 	    edge.rotation = arrow.rotation.clone();
@@ -156,12 +155,14 @@ var cameraControls;
 		return this.segments;
 	}
 
-	function createDNA () {
+	var createDNA = function () {
 		var nucs = convert("hithereherethrerhi");
 		
 		var material = new THREE.LineBasicMaterial({linewidth:3, color:0xE6E6E6});
 
 		var spiral1 = new THREE.Line( spiralGeometry(0), material );
+
+
 		var spiral2 = new THREE.Line( spiralGeometry(Math.PI), material );
 
 		dna = new THREE.Object3D();
@@ -213,12 +214,21 @@ var cameraControls;
 		container.appendChild( renderer.domElement );
 	}
 
-
+	var animFrame;
 	function animate() {
-		var targetFps = 1;
-		window.setInterval(render, 1000 / targetFps);
-		// window.requestAnimationFrame(animate);
-		// render();
+		// var targetFps = 1;
+		// window.setInterval(render, 1000 / targetFps);
+		animFrame = window.requestAnimationFrame(animate);
+		render();
+		
+	}
+
+	function startAnimation () {
+		animFrame = window.requestAnimationFrame(animate);
+	}
+
+	function stopAnimation () {
+		cancelAnimationFrame( animFrame );
 	}
 
 	// var delta = 0.1;
@@ -228,8 +238,8 @@ var cameraControls;
 		var delta = clock.getDelta();
 		cameraControls.update(delta);
 
-		// rot += 0.01;
-		// dna.rotation.setY(rot);
+		rot += 0.01;
+		dna.rotation.setY(rot);
 
 		renderer.render(scene, camera);
 	}
@@ -239,7 +249,18 @@ var cameraControls;
 		init();
 		fillScene();
 		addToDOM();
-		animate();
+		// animate();
+		render();
+
+		$('canvas').on('mousedown', function () {
+			stopAnimation();
+			startAnimation();
+		});
+
+		$('canvas').on('mouseup', function () {
+			stopAnimation();
+		});
+
 	} catch(e) {
 		var errorReport = "Your program encountered an unrecoverable error<br/><br/>";
 		$('#container').append(errorReport+e);
