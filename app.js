@@ -16,14 +16,14 @@ var cameraControls;
 
 		// LIGHTS
 
-		scene.add( new THREE.AmbientLight( 0x333333 ) );
+		scene.add( new THREE.AmbientLight( 0x999999 ) );
 
 		var light = new THREE.DirectionalLight( 0xFFFFFF, 0.7 );
 		light.position.set( 200, 500, 500 );
 
 		scene.add( light );
 
-		light = new THREE.DirectionalLight( 0xFFFFFF, 0.9 );
+		light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
 		light.position.set( -200, -100, -400 );
 
 		scene.add( light );
@@ -95,7 +95,7 @@ var cameraControls;
 
 
 			var sphereMaterial = new THREE.MeshLambertMaterial( {color:0xffffff});
-			var sphereGeometry = new THREE.SphereGeometry( 15, 32, 32);
+			var sphereGeometry = new THREE.SphereGeometry( 20, 32, 32);
 			var sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
 			var sphereMesh2 = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
@@ -209,7 +209,7 @@ var cameraControls;
 	}
 
 	function animate() {
-		var targetFps = 10;
+		var targetFps = 5;
 		window.setInterval(render, 1000 / targetFps);
 		// window.requestAnimationFrame(animate);
 		// render();
@@ -222,7 +222,7 @@ var cameraControls;
 		var delta = clock.getDelta();
 		cameraControls.update(delta);
 
-		// rot += 0.02;
+		// rot += 0.01;
 		// dna.rotation.setY(rot);
 
 		renderer.render(scene, camera);
