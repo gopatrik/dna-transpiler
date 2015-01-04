@@ -4,15 +4,13 @@ var camera, scene, renderer;
 var cameraControls;
 
 (function(){
-
-
 	var dna;
 
 	var clock = new THREE.Clock();
 
 	function fillScene() {
 		scene = new THREE.Scene();
-		// scene.fog = new THREE.Fog( 0x808080, 2000, 4000 );
+		// scene.fog = new THREE.Fog( 0x000000, 500, 4000 );
 
 		lights();
 
@@ -46,7 +44,7 @@ var cameraControls;
 
 			var x = Math.sin(angle) * radius;
 			var z = Math.cos(angle) * radius;
-			geometry.vertices.push(new THREE.Vector3( x, i*30, z ));
+			geometry.vertices.push(new THREE.Vector3( x, i*40, z ));
 		};
 		return geometry;
 	}
@@ -172,16 +170,17 @@ var cameraControls;
 		dna.add(connect(nucs, spiral1, spiral2));
 
 		// rotate and reposish
-		dna.position.setY(100);
-		dna.position.setZ(300);
-		dna.rotation.setX(-Math.PI/4);
+		dna.position.setY(0);
+		dna.position.setZ(-500);
+		dna.rotation.setX(Math.PI/4);
+		// dna.rotation.setZ(-Math.PI/8);
 
 		scene.add(dna);
 	};
 
 	function init() {
-		var canvasWidth = 600;
-		var canvasHeight = 800;
+		var canvasWidth = $(window).width();
+		var canvasHeight = $(window).height();
 		// For grading the window is fixed in size; here's general code:
 		//var canvasWidth = window.innerWidth;
 		//var canvasHeight = window.innerHeight;
@@ -195,10 +194,10 @@ var cameraControls;
 		renderer.setClearColorHex( 0x2C3E50, 1.0 );
 
 		// CAMERA
-		camera = new THREE.PerspectiveCamera( 45, canvasRatio, 1, 4000 );
+		camera = new THREE.PerspectiveCamera( 80, canvasRatio, 1, 4000 );
 		// CONTROLS
 		cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
-		camera.position.set( 1200, 1200, 1200 );
+		camera.position.set( 1200, 1200, 0 );
 		cameraControls.target.set(0,600,0);
 
 		fillScene();
