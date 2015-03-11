@@ -15,7 +15,6 @@ var cameraControls;
 		lights();
 
 		// Coordinates.drawGround({size:1000});
-
 		createDNA();
 	}
 
@@ -76,17 +75,10 @@ var cameraControls;
 
 	function connect (nucs, spiral1, spiral2) {
 		var lines = new THREE.Object3D();
-		// var material = new THREE.LineBasicMaterial({color:0x407711, linewidth:10});
 
 		// THREE.GeometryUtils.merge(geometry, otherGeometry);
 
-
 		for (var i = 0; i < spiral1.geometry.vertices.length; i++) {
-			// var geometry = new THREE.Geometry();
-			// geometry.vertices.push(spiral1.geometry.vertices[i],spiral2.geometry.vertices[i]);
-			// lines.add(new THREE.Line( geometry, material ));
-
-
 			var sphereMaterial = new THREE.MeshLambertMaterial( {color:0xffffff});
 			var sphereGeometry = new THREE.SphereGeometry( 20, 32, 32);
 			var sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
@@ -215,10 +207,10 @@ var cameraControls;
 
 	var animFrame;
 	function animate() {
-		// var targetFps = 1;
-		// window.setInterval(render, 1000 / targetFps);
-		animFrame = window.requestAnimationFrame(animate);
-		render();
+		var targetFps = 50;
+		window.setInterval(render, 1000 / targetFps);
+		// animFrame = window.requestAnimationFrame(animate);
+		// render();
 		
 	}
 
@@ -248,17 +240,17 @@ var cameraControls;
 		init();
 		fillScene();
 		addToDOM();
-		// animate();
+		animate();
 		render();
 
-		$('canvas').on('mousedown', function () {
-			stopAnimation();
-			startAnimation();
-		});
+		// $('canvas').on('mousedown', function () {
+		// 	stopAnimation();
+		// 	startAnimation();
+		// });
 
-		$('canvas').on('mouseup', function () {
-			stopAnimation();
-		});
+		// $('canvas').on('mouseup', function () {
+		// 	stopAnimation();
+		// });
 
 	} catch(e) {
 		var errorReport = "Your program encountered an unrecoverable error<br/><br/>";
